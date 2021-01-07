@@ -52,9 +52,10 @@ git submodule update --init
 
 ## Native installation
 
-*If you feel adventurous, you can also try to setup the softwares directly on your computer. But you're on your own! Due
-to limited time, no support will be provided by the Summer School. You can ask for help in the project's issue trackers,
-but without time guarantees. On Ubuntu 18.04, running setup.sh as root should do most of the work, though.*
+*On Ubuntu 18.04, running setup.sh as root should do most of the work, though. 
+If you feel adventurous on other systems, you can also try to setup the softwares directly on your computer. But you're on your own! Due
+to limited time, only few support will be provided. You can ask for help in the project's issue trackers,
+but without time guarantees. *
 
 The following dependencies are needed:
 
