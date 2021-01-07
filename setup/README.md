@@ -9,8 +9,8 @@ image. We expect better performances with Docker, but VirtualBox is easier to us
 1. run
 ```bash
 docker run --rm -p 7000:7000 -p 8888:8888 \
--v summer-school:/home/student \
--it memoryofmotion/summer-school
+-v supaero2021:/home/student \
+-it nmansard/supaero2021
 ```
 1. Several links are produced by the terminal. Open the one that starts with `127.0.0.1` in your web browser.
 1. An minimal example is produced in ~/hello_talos.ipynb: try it to check your install and say hi to Talos!
@@ -22,9 +22,9 @@ docker run --rm -p 7000:7000 -p 8888:8888 \
 The VirtualBox or Docker images might not contain the latest version of the notebooks so please pull the latest modifications before the tutorials. To do that :
 1. run
 ```bash
-docker run --rm -v summer-school:/home/student \
--it memoryofmotion/summer-school \
-git -C summer-school pull --rebase \
+docker run --rm -v supaero2021:/home/student \
+-it nmansard/supaero2021 \
+git -C supaero2021 pull --rebase \
 --recurse-submodules --ff-only
 ```
 
@@ -33,7 +33,7 @@ git -C summer-school pull --rebase \
 1. Download the virtual machine using [https://frama.link/supaero2021-vbox](this link).
 1. If you don't already have a virtualization system, download [https://www.virtualbox.org/](https://www.virtualbox.org/).
 1. Unzip and load the virtual machine into your virtualization system (the virtual machine is in an open format and should be read by any kind of virtualization system).
-1. Start the VirtualBox Image. If you start the VirtualBox for the first time, everything should be already running with the test notebook ~/summer-school/setup/load_talos.ipynb. Say Hi to Talos!
+1. Start the VirtualBox Image. If you start the VirtualBox for the first time, everything should be already running with the test notebook ~/supaero2021/setup/hello_talos.ipynb. Say Hi to Talos!
 1. Otherwise, you can start by running ```jupyter notebook``` in ~/supaero2021 . Notebooks for the tutorials are in this folder.
 
 ### Update the notebooks

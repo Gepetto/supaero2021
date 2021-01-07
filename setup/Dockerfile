@@ -17,6 +17,6 @@ CMD jupyter notebook --no-browser --ip='*'
 VOLUME /home/student
 
 # (in)validate docker build cache with the last commit from github
-ADD https://api.github.com/repos/memory-of-motion/summer-school/commits/master /
-RUN git clone --recursive https://github.com/memory-of-motion/summer-school.git \
- && ln -s summer-school/setup/load_talos.ipynb
+ADD https://api.github.com/repos/nmansard/supaero2021/commits/main /
+RUN git clone --recursive https://github.com/nmansard/supaero2021.git \
+ && ln -s supaero2021/setup/hello_talos.ipynb
