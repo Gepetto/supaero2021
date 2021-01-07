@@ -59,7 +59,7 @@ but without time guarantees. *
 
 The following dependencies are needed:
 
-- To be install using APT on Ubuntu 18.04 or follow [https://stack-of-tasks.github.io/pinocchio/download.html](Pinocchio documentation).
+- To be install using APT on Ubuntu 18.04 or follow Pinocchio documentation at https://stack-of-tasks.github.io/pinocchio/download.html.
 
 - You also need a bunch of other smaller packages around pinocchio. Once pinocchio is there, apt robotpkg-py36-pinocchio robotpkg-py36-qt4-gepetto-viewer-corba robotpkg-example-robot-data robotpkg-osg-dae robotpkg-py35-example-robot-data
 
