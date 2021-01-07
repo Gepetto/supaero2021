@@ -26,7 +26,7 @@ docker run --rm -v summer-school:/home/student \
 -it memoryofmotion/summer-school \
 git -C summer-school pull --rebase \
 --recurse-submodules --ff-only
-
+```
 
 ## Setting up with VirtualBox
 
