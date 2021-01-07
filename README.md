@@ -6,11 +6,8 @@ The notebooks are in Python and based on the software [Pinocchio](https://github
 
 ## Set up
 
-The software can be run natively on Ubuntu LTS, following the instructions below.
-Alternativelly, two virtualizations have been prepared.
-A Docker image is available, follow the instructions below.
-Or you can download a complete virtual box, see also the instructions below.
-
-### Docker setting
-
+Two virtualizations have been prepared to execute the software on any system.
+A Docker image is available, follow the instructions [here](setup/README.md#setting-up-with-docker).
+Or you can download a complete virtual box, see also the instructions [here](setup/readme.md#setting-up-with-virtualbox).
+The software can be run natively on Ubuntu LTS, following the instructions [here](setup/readme.md#native-installation).
 
