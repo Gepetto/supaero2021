@@ -8,7 +8,7 @@ image. We expect better performances with Docker, but VirtualBox is easier to us
 1. Install docker engine [https://docs.docker.com](https://docs.docker.com/engine/install/ubuntu/#installation-methods)
 1. run
 ```bash
-docker run --rm -p 7000:7000 -p 8888:8888 \
+docker run --rm -p 7000:7000 -p 7001:7001 -p 7002:7002 -p 7003:7003 -p 7004:7004 -p 8888:8888 \
 -v data:/home/student \
 -it gepetto/supaero
 ```
