@@ -145,7 +145,8 @@ if __name__ == "__main__":
     import time
     import numpy as np
     from numpy import cos,sin
-
+    np.random.seed(3)
+    
     robot = RobotHand()
 
     viz = MeshcatVisualizer(robot,url='tcp://127.0.0.1:6000')#classical')
