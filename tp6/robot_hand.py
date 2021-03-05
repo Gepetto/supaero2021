@@ -9,7 +9,9 @@ import hppfcl
 
 def Capsule(name,joint,radius,length,placement,color=[.7,.7,0.98,1]):
     '''Create a Pinocchio::FCL::Capsule to be added in the Geom-Model. '''
-    hppgeom = hppfcl.Capsule(radius,length)
+    ### They should be capsules ... but hppfcl current version is buggy with Capsules...
+    #hppgeom = hppfcl.Capsule(radius,length)
+    hppgeom = hppfcl.Cylinder(radius,length)
     geom = pin.GeometryObject(name,joint,hppgeom,placement)
     geom.meshColor = np.array(color)
     return geom

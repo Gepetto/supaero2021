@@ -46,8 +46,8 @@ class CollisionWrapper:
         
         J1=pin.getJointJacobian(self.rmodel,self.rdata,joint1,pin.ReferenceFrame.LOCAL)
         J2=pin.getJointJacobian(self.rmodel,self.rdata,joint2,pin.ReferenceFrame.LOCAL)
-        Jc1=cMj1.action*J1
-        Jc2=cMj2.action*J2
+        Jc1=cMj1.action@J1
+        Jc2=cMj2.action@J2
         J = (Jc1-Jc2)[2,:]
         return J
 
@@ -71,18 +71,21 @@ class CollisionWrapper:
         a = (cMj1*a1-cMj2*a2).linear[2]
         return a
         
-    def getCollisionJacobian(self,collisions):
+    def getCollisionJacobian(self,collisions=None):
         '''From a collision list, return the Jacobian corresponding to the normal direction.  '''
+        if collisions is None: collisions = self.getCollisionList()
         if len(collisions)==0: return np.ndarray([0,self.rmodel.nv])
         J = np.vstack([ self._getCollisionJacobian(c,r) for (i,c,r) in collisions ])
         return J
 
-    def getCollisionJdotQdot(self,collisions):
+    def getCollisionJdotQdot(self,collisions=None):
+        if collisions is None: collisions = self.getCollisionList()
         if len(collisions)==0: return np.array([])
         a0 = np.vstack([ self._getCollisionJdotQdot(c,r) for (i,c,r) in collisions ])
         return a0
 
-    def getCollisionDistances(self,collisions):
+    def getCollisionDistances(self,collisions=None):
+        if collisions is None: collisions = self.getCollisionList()
         if len(collisions)==0: return np.array([])
         dist = np.array([ self.gdata.distanceResults[i].min_distance for (i,c,r) in collisions ])
         return dist
@@ -157,11 +160,6 @@ if __name__ == "__main__":
     viz.display(q)
 
     col = CollisionWrapper(robot,viz)
-    #    for i in range(1000):
-        #col.computeCollisions(q)
-        #cols = col.getCollisionList()
-        #if len(cols)>0: break
-        
     col.initDisplay()
     col.createDisplayPatchs(1)
     col.computeCollisions(q)
@@ -170,19 +168,32 @@ if __name__ == "__main__":
     ci=cols[0][2]     
     col.displayContact(0,ci.getContact(0))   
 
-    q = robot.q0.copy()
-    vq = np.random.rand(robot.model.nv)*2-1
-    for i in range(10000):
-        q+=vq*1e-3
-        col.computeCollisions(q)
-        cols = col.getCollisionList() 
-        if len(cols)>0: break
-        if not i % 20: viz.display(q)
+    ### Try to find a random contact
+    if 0:
+        q = robot.q0.copy()
+        vq = np.random.rand(robot.model.nv)*2-1
+        for i in range(10000):
+            q+=vq*1e-3
+            col.computeCollisions(q)
+            cols = col.getCollisionList() 
+            if len(cols)>0: break
+            if not i % 20: viz.display(q)
+            
+        viz.display(q)
     
-    viz.display(q)
+        col.displayCollisions()
+        p = cols[0][1]
+        ci = cols[0][2].getContact(0)
+        print(robot.gmodel.geometryObjects[p.first].name,robot.gmodel.geometryObjects[p.second].name)
+        print(ci.pos)
+        
+        import pickle
+        with open('/tmp/bug.pickle', 'wb') as file:
+            pickle.dump([ col.gdata.oMg[11],
+                          col.gdata.oMg[3],
+                          #col.gmodel.geometryObjects[11].geometry,
+            ] , file)
+
+    dist=col.getCollisionDistances()
+    J = col.getCollisionJacobian()
     
-    col.displayCollisions()
-    p = cols[0][1]
-    ci = cols[0][2].getContact(0)
-    print(robot.gmodel.geometryObjects[p.first].name,robot.gmodel.geometryObjects[p.second].name)
-    print(ci.pos)
