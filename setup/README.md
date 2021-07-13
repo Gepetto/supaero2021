@@ -1,4 +1,4 @@
-# Supaero Robotics, software set up
+# Software set up
 
 This setup is provided as a [Docker](https://www.docker.com/) image and a [VirtualBox](https://www.virtualbox.org/)
 image. We expect better performances with Docker, but VirtualBox is easier to use and more bullet-proof.

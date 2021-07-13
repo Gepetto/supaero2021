@@ -1,8 +1,8 @@
-# Supaero robotics, 2021
+# RSS Workshop "Software Tools for Real-Time Optimal Control"
 
-This repository contains the exercices for the robotics class at Supaero, 2021.
-The exercices are organized by notebook. Each notebook corresponds to one chapter of the class.
-The notebooks are in Python and based on the software [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
+This repository contains the exercices for the tutorial organized at RSS 2021 about ["Software Tools for Real-Time Optimal Control"](https://mpcworkshop.org/) 
+The exercices are organized by notebooks. Each notebook corresponds to one examples of the presentation.
+The notebooks are in Python and based on the software [Crocoddyl](https://github.com/loco-3d/crocoddyl/), build on top of [Pinocchio](https://github.com/stack-of-tasks/pinocchio).
 
 ## Set up
 
