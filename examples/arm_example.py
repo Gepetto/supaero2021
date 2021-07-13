@@ -9,24 +9,23 @@ import sys
 WITHDISPLAY = 'display' in sys.argv
 WITHPLOT = 'plot' in sys.argv
 
-import crocoddyl; crocoddyl.switchToNumpyMatrix()
+import crocoddyl
 import pinocchio
 import numpy as np
 import example_robot_data
 
 # First, let's load the Pinocchio model for the Talos arm.
 robot = example_robot_data.load('talos_arm')
-
-# Set robot model
 robot_model = robot.model
 robot_model.armature =np.array([1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.])*5
-robot_model.q0 = np.array([3.5,2,2,0,0,0,0])
+robot_model.q0 = robot_model.referenceConfigurations['half_sitting']
 robot_model.x0 = np.concatenate([robot_model.q0, pinocchio.utils.zero(robot_model.nv)])
-robot_model.gravity *= 0
 
 # Configure task
 FRAME_TIP = robot_model.getFrameId("gripper_left_fingertip_3_link")
-goal = np.array([.2,0.5,.5])
+GOAL = np.array([.2,0.5,.5])
+DT = 1e-2
+T = 100
 
 # Configure viewer
 from utils.meshcat_viewer_wrapper import MeshcatVisualizer
@@ -41,35 +40,27 @@ state = crocoddyl.StateMultibody(robot_model)
 runningCostModel = crocoddyl.CostModelSum(state)
 terminalCostModel = crocoddyl.CostModelSum(state)
 
-# Note that we need to include a cost model (i.e. set of cost functions) in
-# order to fully define the action model for our optimal control problem.
-# For this particular example, we formulate three running-cost functions:
-# goal-tracking cost, state and control regularization; and one terminal-cost:
-# goal cost. First, let's create the common cost functions.
-Mref = crocoddyl.FramePlacement(FRAME_TIP,pinocchio.SE3(np.eye(3), goal))
-#goalTrackingCost = crocoddyl.CostModelFramePlacement(state, Mref)
-pref = crocoddyl.FrameTranslation(FRAME_TIP,goal)
+# Reaching cost term
+pref = crocoddyl.FrameTranslation(FRAME_TIP,GOAL)
 goalTrackingCost = crocoddyl.CostModelFrameTranslation(state, pref)
+#Mref = crocoddyl.FramePlacement(FRAME_TIP,pinocchio.SE3(np.eye(3), GOAL))
+#goalTrackingCost = crocoddyl.CostModelFramePlacement(state, Mref)
+runningCostModel.addCost("gripperPose", goalTrackingCost, .001)
+terminalCostModel.addCost("gripperPose", goalTrackingCost, 10)
+
+# Regularization cost term
 weights=crocoddyl.ActivationModelWeightedQuad(np.array([1,1,1,1,1,1,1, 1,1,1,1,2,2,2.]))
 xRegCost = crocoddyl.CostModelState(state,weights,robot_model.x0)
 uRegCost = crocoddyl.CostModelControl(state)
-weightsT=crocoddyl.ActivationModelWeightedQuad(np.array([.01,.01,.01,.01,.01,.01,.01, 1,1,1,1,2,2,2.]))
-xRegCostT = crocoddyl.CostModelState(state,weights,robot_model.x0)
-
-# Then let's added the running and terminal cost functions
-runningCostModel.addCost("gripperPose", goalTrackingCost, .001)
 runningCostModel.addCost("xReg", xRegCost, 1e-3)
 runningCostModel.addCost("uReg", uRegCost, 1e-6)
-terminalCostModel.addCost("gripperPose", goalTrackingCost, 10)
-terminalCostModel.addCost("xReg", xRegCostT, .01)
 
 # Next, we need to create an action model for running and terminal knots. The
 # forward dynamics (computed using ABA) are implemented
 # inside DifferentialActionModelFullyActuated.
 actuationModel = crocoddyl.ActuationModelFull(state)
-dt = 1e-2
 runningModel = crocoddyl.IntegratedActionModelEuler(
-    crocoddyl.DifferentialActionModelFreeFwdDynamics(state, actuationModel, runningCostModel), dt)
+    crocoddyl.DifferentialActionModelFreeFwdDynamics(state, actuationModel, runningCostModel), DT)
 runningModel.differential.armature = robot_model.armature
 terminalModel = crocoddyl.IntegratedActionModelEuler(
     crocoddyl.DifferentialActionModelFreeFwdDynamics(state, actuationModel, terminalCostModel), 0.)
