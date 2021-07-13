@@ -29,8 +29,8 @@ FRAME_TIP = robot_model.getFrameId("gripper_left_fingertip_3_link")
 goal = np.array([.2,0.5,.5])
 
 # Configure viewer
-from tp3.meshcat_viewer_wrapper import MeshcatVisualizer
-viz = MeshcatVisualizer(robot,url='tcp://127.0.0.1:6004')#classical')
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer
+viz = MeshcatVisualizer(robot,'classical')
 viz.display(robot_model.q0)
 viz.addBox('world/box',[.1,.1,.1], [1.,0,0,1])
 viz.addBox('world/goal',[.1,.1,.1],[0,1,0,1])
@@ -98,5 +98,5 @@ if WITHPLOT:
 
 # Visualizing the solution in gepetto-viewer
 if WITHDISPLAY:
-    import tp7.croco_utils as crocutils
+    import utils.croco_utils as crocutils
     crocutils.displayTrajectory(viz,ddp.xs,ddp.problem.runningModels[0].dt,12)
