@@ -1,0 +1,17 @@
+idx = robot.index('wrist_3_joint')
+oMeff = robot.placement(q, idx)  # Placement of end-eff wrt world at current configuration
+oMbox = pin.XYZQUATToSE3(q_box)  # Placement of box     wrt world
+effMbox = oMeff.inverse() * oMbox  # Placement of box     wrt eff
+
+for i in range(1000):
+    # Chose new configuration of the robot
+    q += vq / 40
+    q[2] = 1.71 + math.sin(i * 0.05) / 2
+
+    # Gets the new position of the box
+    oMbox = robot.placement(q, idx) * effMbox
+
+    # Display new configuration for robot and box
+    viz.applyConfiguration(boxID, oMbox)
+    viz.display(q)
+    time.sleep(0.1)

@@ -1,0 +1,12 @@
+q0 = np.zeros(NQ)  # set the correct values here
+q0[0] = 0.5
+q0[1] = 0.
+q0[2] = -1.5
+q0[3] = 0.
+q0[4] = 0.
+q0[5] = 0.
+
+viz.display(q0)
+
+# Take care to explicitely mention copy when you want a copy of array.
+q = q0.copy()

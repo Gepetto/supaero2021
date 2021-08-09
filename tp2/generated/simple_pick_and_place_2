@@ -1,0 +1,8 @@
+# Add a red box in the viewer
+ballID = "world/ball"
+viz.addSphere(ballID, 0.1, colors.red)
+
+# Place the ball at the position ( 0.5, 0.1, 0.2 )
+# The viewer expect position and rotation, apppend the identity quaternion
+q_ball = [0.5, 0.1, 0.2, 1, 0, 0, 0]
+viz.applyConfiguration(ballID, q_ball)

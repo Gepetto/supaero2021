@@ -30,7 +30,7 @@ def generate(tp_number: int):
                     if dest is None:
                         raise SyntaxError(f'%end_load block before open at line {line_number + 1}')
                     with dest.open('w') as f_out:
-                        f_out.write('\n'.join(content))
+                        f_out.write(''.join(content))
                     content = [f'%do_not_load {dest}\n'] if hidden else [f'# %load {dest}\n', '\n'] + content
                     content[-1] = content[-1].strip()
                     for cell_number, cell in enumerate(cells_copy):
