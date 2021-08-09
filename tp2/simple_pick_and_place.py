@@ -32,7 +32,7 @@ viz.applyConfiguration(ballID, q_ball)
 
 # Configuration for picking the box
 # %do_load 3
-q0 = np.zeros(NQ)  ### set the correct values here
+q0 = np.zeros(NQ)  # set the correct values here
 q0[0] = 0.5
 q0[1] = 0.
 q0[2] = -1.5
@@ -90,9 +90,21 @@ boxID = "world/box"
 viz.delete(ballID)
 viz.addBox(boxID, [0.1, 0.2, 0.1], colors.magenta)
 
-# Place the box at the position ( 0.5, 0.1, 0.2 )
+# Place the box at the position (0.5, 0.1, 0.2)
 q_box = [0.5, 0.1, 0.2, 1, 0, 0, 0]
 viz.applyConfiguration('world/box', q_box)
+# %end_load
+
+# %do_load 6
+q0 = np.zeros(NQ)
+q0[0] = -0.375
+q0[1] = -1.2
+q0[2] = 1.71
+q0[3] = -q0[1] - q0[2]
+q0[4] = q0[0]
+
+viz.display(q0)
+q = q0.copy()
 # %end_load
 
 print("Now moving with a 6D object ... ")
@@ -100,7 +112,7 @@ print("Now moving with a 6D object ... ")
 # Random velocity of the robot driving the movement
 vq = np.array([2., 0, 0, 4., 0, 0])
 
-# %do_not_load 6
+# %do_not_load 7
 idx = robot.index('wrist_3_joint')
 oMeff = robot.placement(q, idx)  # Placement of end-eff wrt world at current configuration
 oMbox = pin.XYZQUATToSE3(q_box)  # Placement of box     wrt world
