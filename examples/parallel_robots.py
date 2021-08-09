@@ -3,16 +3,11 @@ Load 4 times the UR5 model, plus a plate object on top of them, to feature a sim
 No optimization, this file is just an example of how to load the models.
 '''
 
-import math
-import time
 import numpy as np
 import pinocchio as pin
-from load_ur5_parallel import load as loadUR5s
 
-from scipy.optimize import fmin_bfgs
-from numpy.linalg import norm,inv,pinv,svd,eig
-
-from tp2.meshcat_viewer_wrapper import MeshcatVisualizer
+from utils.load_ur5_parallel import load as loadUR5s
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 
 # Load 4 Ur5 robots, placed at 0.3m from origin in the 4 directions x,y,-x,-y.
 robot = loadUR5s()
