@@ -1,5 +1,7 @@
 import math
 import time
+import unittest
+
 import numpy as np
 import pinocchio as pin
 import example_robot_data as robex
@@ -13,7 +15,7 @@ NQ = robot.model.nq
 NV = robot.model.nv
 
 # Open the viewer
-viz = MeshcatVisualizer(robot, url='classical')
+viz = MeshcatVisualizer(robot)
 
 # %do_load 2
 # Add a red box in the viewer
@@ -131,3 +133,8 @@ for i in range(1000):
     viz.display(q)
     time.sleep(0.1)
 # %end_load
+
+
+class SimplePickAndPlaceTest(unittest.TestCase):
+    def test_oMbox_translation(self):
+        self.assertTrue((np.abs(oMbox.translation - np.array([0.58907366, -0.09457755, 0.2335223])) < 1e-5).all())

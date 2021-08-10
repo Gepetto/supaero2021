@@ -8,13 +8,15 @@ reference target.
 '''
 
 import time
+import unittest
+
 import numpy as np
 import pinocchio as pin
 import example_robot_data as robex
 from scipy.optimize import fmin_bfgs
 from numpy.linalg import norm
 
-from tp2.meshcat_viewer_wrapper import MeshcatVisualizer
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 
 # --- Load robot model
 robot = robex.load('solo12')
@@ -22,7 +24,7 @@ NQ = robot.model.nq
 NV = robot.model.nv
 
 # Open the viewer
-viz = MeshcatVisualizer(robot, url='classical')
+viz = MeshcatVisualizer(robot)
 viz.display(robot.q0)
 
 # %do_load 1
@@ -72,3 +74,8 @@ def callback(q):
 Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([0.5, 0.1, 0.2]))  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 # %end_load
+
+
+class FloatingTest(unittest.TestCase):
+    def test_cost(self):
+        self.assertLess(cost(qopt), 1e-10)

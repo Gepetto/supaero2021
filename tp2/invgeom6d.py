@@ -8,6 +8,8 @@ reference target.
 '''
 
 import time
+import unittest
+
 import numpy as np
 import pinocchio as pin
 import example_robot_data as robex
@@ -22,7 +24,7 @@ NQ = robot.model.nq
 NV = robot.model.nv
 
 # Open the viewer
-viz = MeshcatVisualizer(robot, url='classical')
+viz = MeshcatVisualizer(robot)
 
 # Define an init config
 robot.q0 = np.array([0, -3.14 / 2, 0, 0, 0, 0])
@@ -58,3 +60,10 @@ qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 
 print('The robot finally reached effector placement at\n', robot.placement(qopt, 6))
 # %end_load
+
+
+class InvGeom6DTest(unittest.TestCase):
+    def test_qopt_6d(self):
+        Mopt = robot.placement(qopt, 6)
+        self.assertTrue((np.abs(Mtarget.translation - Mopt.translation) < 1e-7).all())
+        self.assertTrue((np.abs(Mtarget.translation - Mopt.translation) < 1e-7).all())

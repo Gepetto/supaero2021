@@ -8,6 +8,8 @@ reference target.
 '''
 
 import time
+import unittest
+
 import numpy as np
 import example_robot_data as robex
 from scipy.optimize import fmin_bfgs
@@ -21,7 +23,7 @@ NQ = robot.model.nq
 NV = robot.model.nv
 
 # Open the viewer
-viz = MeshcatVisualizer(robot, url='classical')
+viz = MeshcatVisualizer(robot)
 
 # Define an init config
 robot.q0 = np.array([0, -3.14 / 2, 0, 0, 0, 0])
@@ -55,3 +57,8 @@ def callback(q):
 target = np.array([0.5, 0.1, 0.2])  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 # %end_load
+
+
+class InvGeom3DTest(unittest.TestCase):
+    def test_qopt_translation(self):
+        self.assertTrue((np.abs(target - robot.placement(qopt, 6).translation) < 1e-4).all())

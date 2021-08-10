@@ -1,10 +1,24 @@
 import numpy as np
 import pinocchio as pin
-import example_robot_data as robex
+from example_robot_data import load
 
 
-def load():
-    robot = robex.load('ur5')
+def load_ur5_parallel():
+    """
+    Create a robot composed of 4 UR5
+
+    >>> ur5 = load('ur5')
+    >>> ur5.nq
+    6
+    >>> len(ur5.visual_model.geometryObjects)
+    7
+    >>> robot = load_ur5_parallel()
+    >>> robot.nq
+    24
+    >>> len(robot.visual_model.geometryObjects)
+    28
+    """
+    robot = load('ur5')
     nbRobots = 4
 
     models = [robot.model.copy() for _ in range(nbRobots)]
@@ -55,6 +69,6 @@ def load():
 if __name__ == "__main__":
     from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 
-    robot = load()
+    robot = load_ur5_parallel()
     viz = MeshcatVisualizer(robot, url='classical')
     viz.display(robot.q0)

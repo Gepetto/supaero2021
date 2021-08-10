@@ -6,11 +6,11 @@ No optimization, this file is just an example of how to load the models.
 import numpy as np
 import pinocchio as pin
 
-from utils.load_ur5_parallel import load as loadUR5s
+from utils.load_ur5_parallel import load_ur5_parallel
 from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 
 # Load 4 Ur5 robots, placed at 0.3m from origin in the 4 directions x,y,-x,-y.
-robot = loadUR5s()
+robot = load_ur5_parallel()
 
 # Open the viewer
 viz = MeshcatVisualizer(url='classical')

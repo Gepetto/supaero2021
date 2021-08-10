@@ -1,5 +1,7 @@
-import numpy as np
+import random
+
 import meshcat
+import numpy as np
 import pinocchio as pin
 from pinocchio.visualize import MeshcatVisualizer as PMV
 
@@ -12,16 +14,14 @@ def materialFromColor(color):
     elif isinstance(color, str):
         material = colors.colormap[color]
     elif isinstance(color, list):
-        from .colors import rgb2int
         material = meshcat.geometry.MeshPhongMaterial()
-        material.color = rgb2int(*[int(c * 255) for c in color[:3]])
+        material.color = colors.rgb2int(*[int(c * 255) for c in color[:3]])
         if len(color) == 3:
             material.transparent = False
         else:
             material.transparent = color[3] < 1
             material.opacity = float(color[3])
     elif color is None:
-        import random
         material = random.sample(list(colors.colormap), 1)[0]
     else:
         material = colors.black
@@ -31,9 +31,9 @@ def materialFromColor(color):
 class MeshcatVisualizer(PMV):
     def __init__(self, robot=None, model=None, collision_model=None, visual_model=None, url=None):
         if robot is not None:
-            PMV.__init__(self, robot.model, robot.collision_model, robot.visual_model)
+            super().__init__(robot.model, robot.collision_model, robot.visual_model)
         elif model is not None:
-            PMV.__init__(self, model, collision_model, visual_model)
+            super().__init__(model, collision_model, visual_model)
 
         if url is not None:
             if url == 'classical':
@@ -80,7 +80,7 @@ class MeshcatVisualizer(PMV):
         self.viewer[name].set_transform(T)
 
     def delete(self, name):
-        self[name].delete()
+        self.viewer[name].delete()
 
     def __getitem__(self, name):
         return self.viewer[name]
