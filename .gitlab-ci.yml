@@ -25,6 +25,8 @@ format:
     - test -f /builds/setup.cfg || ln -s /root/setup.cfg /builds
     - test -f /builds/.clang-format || ln -s /root/.clang-format /builds
   script:
-    - check-clang-format.sh
-    - flake8 .
-    - yapf -dr .
+    - flake8 utils examples tp2
+    - nbqa flake8 2_geometry_3d.ipynb
+    - yapf -dr utils examples tp2
+    - nbqa yapf -ri 2_geometry_3d.ipynb
+    - git diff --exit-code

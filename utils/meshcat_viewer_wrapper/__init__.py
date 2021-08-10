@@ -1,2 +1,1 @@
-from . import colors
-from .visualizer import MeshcatVisualizer
+from .visualizer import MeshcatVisualizer  # noqa
