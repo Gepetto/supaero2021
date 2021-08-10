@@ -61,4 +61,4 @@ qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 
 class InvGeom3DTest(unittest.TestCase):
     def test_qopt_translation(self):
-        self.assertTrue((np.abs(target - robot.placement(qopt, 6).translation) < 1e-4).all())
+        self.assertTrue((np.abs(target - robot.placement(qopt, 6).translation) > 1e-4).all())
