@@ -16,7 +16,7 @@
 
 pinocchio-tutorials-20.04:
   <<: *pinocchio-tutorials
-  image: memmos.laas.fr:5000/loco-3d/crocoddyl/py-crocoddyl:20.04
+  image: memmos.laas.fr:5000/stack-of-tasks/pinocchio-tutorials/py-pinocchio-tutorials:20.04
 
 format:
   image: gepetto/linters
