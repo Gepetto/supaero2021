@@ -10,8 +10,6 @@
   except:
     - gh-pages
   script:
-    - pwd
-    - ls
     - python -m unittest
 
 pinocchio-tutorials-20.04:
