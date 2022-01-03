@@ -45,7 +45,8 @@ def createRobotWithObstacles(robotname='ur5'):
     nobs = len(oMobs)
     nbodies = robot.collision_model.ngeoms-nobs
     robotBodies = range(nbodies)
-    envBodies = range(nbodies,nbodies+nobs)
+    envBodies = range(nbodies,nbodies+nobs) 
+    robot.collision_model.removeAllCollisionPairs()
     for a,b in itertools.product(robotBodies,envBodies):
         robot.collision_model.addCollisionPair(pin.CollisionPair(a,b))
     

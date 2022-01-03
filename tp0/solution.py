@@ -120,9 +120,11 @@ def plotConfigurationSpace(hcol,hfree):
      plt.subplot(2,1,1)
      plt.scatter(h[:,0],h[:,1],c=h[:,2],s=20,lw=0)
      plt.title("Distance to the target")
+     plt.colorbar()
      plt.subplot(2,1,2)
      plt.scatter(h[:,0],h[:,1],c=h[:,3],s=20,lw=0)
      plt.title("Distance to the obstacles")
+     plt.colorbar()
 
 hcol,hfree = sampleSpace(100)
 plotConfigurationSpace(hcol,hfree)
@@ -155,8 +157,16 @@ def optimize():
      Optimize from an initial random configuration to discover a collision-free
      configuration as close as possible to the target. 
      '''
-     return fmin_slsqp(x0=qrand(check=True),
+     return fmin_slsqp(x0=q6_to_q2(qrand(check=True)),
                        func=cost,
-                       f_ieqcons=constraint,callback=callback)
+                       f_ieqcons=constraint,callback=callback,
+                       full_output=1)
 
-optimize()
+while True:
+    res=optimize()
+    q=q2_to_q6(res[0])
+    viz.display(q)
+    if res[4]=='Optimization terminated successfully' and res[1]<1e-6:
+        print('Finally successful!')
+        break
+    print("Failed ... let's try again! ")
