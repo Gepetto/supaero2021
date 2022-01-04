@@ -1,0 +1,10 @@
+# Sample a random free configuration where dist is small enough.
+def qrandTarget(threshold=5e-2, display=False):
+     while True:
+          q = qrand()
+          if display:
+               viz.display(q)
+               time.sleep(1e-3)
+          if not coll(q) and dist(q)<threshold:
+               return q
+viz.display(qrandTarget())

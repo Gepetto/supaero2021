@@ -1,0 +1,10 @@
+def q2_to_q6(q2):
+     '''
+     Transform a vector 2 into a vector 6, corresponding to locking 4 joints of the 6-dof arm. 
+     '''
+     q6 = np.zeros(6)
+     q6.flat[[1,2]] = q2
+     return q6
+
+def q6_to_q2(q6):
+     return q6[1:3]

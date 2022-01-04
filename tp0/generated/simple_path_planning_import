@@ -1,0 +1,7 @@
+import pinocchio as pin
+import time
+import numpy as np
+from numpy.linalg import inv,norm,pinv,svd,eig
+from scipy.optimize import fmin_bfgs,fmin_slsqp
+from utils.load_ur5_with_obstacles import load_ur5_with_obstacles,Target
+import matplotlib.pylab as plt

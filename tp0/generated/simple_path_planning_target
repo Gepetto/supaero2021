@@ -1,0 +1,1 @@
+target = Target(robot.viz,position = np.array([.5,.5]))

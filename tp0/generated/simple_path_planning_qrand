@@ -1,0 +1,8 @@
+def qrand(check=False):
+    '''
+    Return a random configuration. If check is True, this
+    configuration is not is collision
+    '''
+    while True:
+        q = q2_to_q6(np.random.rand(2)*6-3)  # sample between -3 and +3.
+        if not check or not coll(q): return q

@@ -1,0 +1,1 @@
+robot = load_ur5_with_obstacles()

@@ -1,0 +1,11 @@
+# Random descent: crawling from one free configuration to the target with random
+# steps.
+def randomDescent():
+     q = qrand(check=True)
+     for i in range(100):
+          dq = qrand()*.1                           # Choose a random step ...
+          qtry = q+dq                               # ... apply
+          if dist(q)>dist(q+dq) and not coll(q+dq): # If distance decrease without collision ...
+               q = q+dq                             # ... keep the step
+               viz.display(q)                       # ... display it
+               time.sleep(5e-3)                     # ... and sleep for a short while

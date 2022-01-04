@@ -1,0 +1,4 @@
+def endef(q):
+     '''Return the 2d position of the end effector.'''
+     pin.forwardKinematics(robot.model,robot.data,q)
+     return robot.data.oMi[-1].translation[[0,2]]

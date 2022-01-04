@@ -1,0 +1,6 @@
+#robot.initViewer(loadModel=True)
+#viz = robot.viz
+Viewer = pin.visualize.MeshcatVisualizer
+viz = Viewer(robot.model, robot.collision_model, robot.visual_model)
+viz.initViewer(loadModel=True)
+viz.display(robot.q0)
