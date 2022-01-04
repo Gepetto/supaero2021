@@ -1,12 +1,3 @@
-# --- Add box to represent target
-viz.addBox("world/box", [.05, .1, .2], [1., .2, .2, .5])
-viz.addBox("world/blue", [.05, .1, .2], [.2, .2, 1., .5])
-
-#
-# OPTIM 6D #########################################################
-#
-
-
 def cost(q):
     '''Compute score from a configuration'''
     M = robot.placement(q, 6)
@@ -20,7 +11,7 @@ def callback(q):
     time.sleep(1e-1)
 
 
-Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([0.5, 0.1, 0.2]))  # x,y,z
+Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([-0.5, 0.1, 0.2]))  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 
 print('The robot finally reached effector placement at\n', robot.placement(qopt, 6))

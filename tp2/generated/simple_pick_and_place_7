@@ -1,9 +1,12 @@
+# Random velocity of the robot driving the movement
+vq = np.array([2., 0, 0, 4., 0, 0])
+
 idx = robot.index('wrist_3_joint')
 oMeff = robot.placement(q, idx)  # Placement of end-eff wrt world at current configuration
 oMbox = pin.XYZQUATToSE3(q_box)  # Placement of box     wrt world
 effMbox = oMeff.inverse() * oMbox  # Placement of box     wrt eff
 
-for i in range(1000):
+for i in range(100):
     # Chose new configuration of the robot
     q += vq / 40
     q[2] = 1.71 + math.sin(i * 0.05) / 2

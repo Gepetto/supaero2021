@@ -32,16 +32,20 @@ viz.display(robot.q0)
 time.sleep(1)
 print("Let's go to pdes.")
 
-# %do_load 1
 # --- Add box to represent target
-viz.addBox("world/box", [.05, .1, .2], [1., .2, .2, .5])
-viz.addBox("world/blue", [.05, .1, .2], [.2, .2, 1., .5])
+# Add a vizualization for the target
+boxID = "world/box"
+viz.addBox(boxID, [.05, .1, .2], [1., .2, .2, .5])
+# Add a vizualisation for the tip of the arm.
+tipID = "world/blue"
+viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
 
 #
 # OPTIM 6D #########################################################
 #
 
 
+# %do_load 1
 def cost(q):
     '''Compute score from a configuration'''
     M = robot.placement(q, 6)
@@ -49,13 +53,13 @@ def cost(q):
 
 
 def callback(q):
-    viz.applyConfiguration('world/box', Mtarget)
-    viz.applyConfiguration('world/blue', robot.placement(q, 6))
+    viz.applyConfiguration(boxID, Mtarget)
+    viz.applyConfiguration(tipID, robot.placement(q, 6))
     viz.display(q)
     time.sleep(1e-1)
 
 
-Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([0.5, 0.1, 0.2]))  # x,y,z
+Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([-0.5, 0.1, 0.2]))  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 
 print('The robot finally reached effector placement at\n', robot.placement(qopt, 6))

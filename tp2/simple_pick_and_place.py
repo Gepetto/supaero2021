@@ -35,20 +35,17 @@ viz.applyConfiguration(ballID, q_ball)
 # Configuration for picking the box
 # %do_load 3
 q0 = np.zeros(NQ)  # set the correct values here
-q0[0] = 0.5
-q0[1] = 0.
-q0[2] = -1.5
-q0[3] = 0.
-q0[4] = 0.
+q0[0] = -0.375
+q0[1] = -1.2
+q0[2] = 1.71
+q0[3] = -q0[1] - q0[2]
+q0[4] = q0[0]
 q0[5] = 0.
 
 viz.display(q0)
-
-# Take care to explicitely mention copy when you want a copy of array.
 q = q0.copy()
 # %end_load
-
-print("The robot is display with end effector on the red box.")
+print("The robot is display with end effector on the red ball.")
 
 #
 # MOVE 3D #############################################################
@@ -89,12 +86,13 @@ viz.display(q0)
 # %do_load 5
 # Add a red box in the viewer
 boxID = "world/box"
-viz.delete(ballID)
+#viz.delete(ballID)
 viz.addBox(boxID, [0.1, 0.2, 0.1], colors.magenta)
 
 # Place the box at the position (0.5, 0.1, 0.2)
 q_box = [0.5, 0.1, 0.2, 1, 0, 0, 0]
-viz.applyConfiguration('world/box', q_box)
+viz.applyConfiguration(boxID, q_box)
+viz.applyConfiguration(ballID, [2,2,2,1,0,0,0])
 # %end_load
 
 # %do_load 6
@@ -111,16 +109,16 @@ q = q0.copy()
 
 print("Now moving with a 6D object ... ")
 
+# %do_not_load 7
 # Random velocity of the robot driving the movement
 vq = np.array([2., 0, 0, 4., 0, 0])
 
-# %do_not_load 7
 idx = robot.index('wrist_3_joint')
 oMeff = robot.placement(q, idx)  # Placement of end-eff wrt world at current configuration
 oMbox = pin.XYZQUATToSE3(q_box)  # Placement of box     wrt world
 effMbox = oMeff.inverse() * oMbox  # Placement of box     wrt eff
 
-for i in range(1000):
+for i in range(100):
     # Chose new configuration of the robot
     q += vq / 40
     q[2] = 1.71 + math.sin(i * 0.05) / 2
@@ -134,7 +132,8 @@ for i in range(1000):
     time.sleep(0.1)
 # %end_load
 
-
+##########################################################################
+### This last part is to automatically validate the versions of this example.
 class SimplePickAndPlaceTest(unittest.TestCase):
     def test_oMbox_translation(self):
         self.assertTrue((np.abs(oMbox.translation - np.array([0.58907366, -0.09457755, 0.2335223])) < 1e-5).all())

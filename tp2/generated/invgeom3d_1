@@ -1,3 +1,10 @@
+# Add a vizualisation for the tip of the arm.
+tipID = "world/blue"
+viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
+#
+# OPTIM 3D #########################################################
+#
+
 def cost(q):
     '''Compute score from a configuration'''
     p = robot.placement(q, 6).translation
@@ -5,8 +12,8 @@ def cost(q):
 
 
 def callback(q):
-    viz.applyConfiguration('world/ball', target.tolist() + [0, 1, 0, 0])
-    viz.applyConfiguration('world/blue', robot.placement(q, 6))
+    viz.applyConfiguration(ballID, target.tolist() + [0, 1, 0, 0])
+    viz.applyConfiguration(tipID, robot.placement(q, 6))
     viz.display(q)
     time.sleep(1e-1)
 

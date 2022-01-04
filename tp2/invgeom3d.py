@@ -32,15 +32,17 @@ time.sleep(1)
 print("Let's go to pdes.")
 
 # --- Add ball to represent target
-viz.addSphere("world/ball", .05, 'green')
-viz.addBox("world/blue", [.08] * 3, [.2, .2, 1., .5])
-
+# Add a vizualization for the target
+ballID = "world/ball"
+viz.addSphere(ballID, .05, 'green')
+# %do_not_load 1
+# Add a vizualisation for the tip of the arm.
+tipID = "world/blue"
+viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
 #
 # OPTIM 3D #########################################################
 #
 
-
-# %do_not_load 1
 def cost(q):
     '''Compute score from a configuration'''
     p = robot.placement(q, 6).translation
@@ -48,8 +50,8 @@ def cost(q):
 
 
 def callback(q):
-    viz.applyConfiguration('world/ball', target.tolist() + [0, 1, 0, 0])
-    viz.applyConfiguration('world/blue', robot.placement(q, 6))
+    viz.applyConfiguration(ballID, target.tolist() + [0, 1, 0, 0])
+    viz.applyConfiguration(tipID, robot.placement(q, 6))
     viz.display(q)
     time.sleep(1e-1)
 
@@ -58,7 +60,8 @@ target = np.array([0.5, 0.1, 0.2])  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 # %end_load
 
-
+##########################################################################
+### This last part is to automatically validate the versions of this example.
 class InvGeom3DTest(unittest.TestCase):
     def test_qopt_translation(self):
         self.assertTrue((np.abs(target - robot.placement(qopt, 6).translation) < 1e-4).all())

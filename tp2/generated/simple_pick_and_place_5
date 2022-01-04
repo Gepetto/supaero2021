@@ -1,8 +1,9 @@
 # Add a red box in the viewer
 boxID = "world/box"
-viz.delete(ballID)
+#viz.delete(ballID)
 viz.addBox(boxID, [0.1, 0.2, 0.1], colors.magenta)
 
 # Place the box at the position (0.5, 0.1, 0.2)
 q_box = [0.5, 0.1, 0.2, 1, 0, 0, 0]
-viz.applyConfiguration('world/box', q_box)
+viz.applyConfiguration(boxID, q_box)
+viz.applyConfiguration(ballID, [2,2,2,1,0,0,0])
