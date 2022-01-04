@@ -17,4 +17,4 @@ for i in range(50):
     # Display new configuration for robot and ball
     viz.applyConfiguration(ballID, o_ball.tolist() + [1, 0, 0, 0])
     viz.display(q)
-    time.sleep(0.1)
+    time.sleep(1e-2)

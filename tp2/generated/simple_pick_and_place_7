@@ -17,4 +17,4 @@ for i in range(100):
     # Display new configuration for robot and box
     viz.applyConfiguration(boxID, oMbox)
     viz.display(q)
-    time.sleep(0.1)
+    time.sleep(1e-2)

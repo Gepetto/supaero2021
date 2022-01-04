@@ -1,0 +1,7 @@
+# Add a new object featuring the parallel robot tool plate.
+[w, h, d] = [0.5, 0.5, 0.005]
+color = [red, green, blue, transparency] = [1, 1, 0.78, .3]
+viz.addBox('world/robot0/toolplate', [w, h, d], color)
+Mtool = pin.SE3(pin.utils.rotate('z', 1.268), np.array([0, 0, .75]))
+viz.applyConfiguration('world/robot0/toolplate', Mtool)
+viz.display(robot.q0)

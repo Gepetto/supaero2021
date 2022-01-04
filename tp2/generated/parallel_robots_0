@@ -1,0 +1,7 @@
+from utils.load_ur5_parallel import load_ur5_parallel
+
+# Load 4 Ur5 robots, placed at 0.3m from origin in the 4 directions x,y,-x,-y.
+robot = load_ur5_parallel()
+
+# Open the viewer
+viz = MeshcatVisualizer(robot)

@@ -28,7 +28,7 @@ viz = MeshcatVisualizer(robot)
 # Define an init config
 robot.q0 = np.array([0, -3.14 / 2, 0, 0, 0, 0])
 viz.display(robot.q0)
-time.sleep(1)
+time.sleep(.3)
 print("Let's go to pdes.")
 
 # --- Add ball to represent target
@@ -53,7 +53,7 @@ def callback(q):
     viz.applyConfiguration(ballID, target.tolist() + [0, 1, 0, 0])
     viz.applyConfiguration(tipID, robot.placement(q, 6))
     viz.display(q)
-    time.sleep(1e-1)
+    time.sleep(1e-2)
 
 
 target = np.array([0.5, 0.1, 0.2])  # x,y,z

@@ -1,0 +1,2 @@
+effector_indexes = [robot.model.getFrameId('tool0_#%d' % i) for i in range(4)]
+robot.framePlacement(robot.q0, effector_indexes[0])

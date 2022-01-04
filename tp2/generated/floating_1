@@ -38,7 +38,7 @@ def callback(q):
         viz.applyConfiguration('world/%s_des' % colors[i], list(targets[i]) + [1, 0, 0, 0])
 
     viz.display(q)
-    time.sleep(1e-1)
+    time.sleep(1e-2)
 
 
 Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([0.5, 0.1, 0.2]))  # x,y,z

@@ -29,13 +29,14 @@ viz = MeshcatVisualizer(robot)
 # Define an init config
 robot.q0 = np.array([0, -3.14 / 2, 0, 0, 0, 0])
 viz.display(robot.q0)
-time.sleep(1)
+time.sleep(.3)
 print("Let's go to pdes.")
 
 # --- Add box to represent target
 # Add a vizualization for the target
 boxID = "world/box"
 viz.addBox(boxID, [.05, .1, .2], [1., .2, .2, .5])
+# %do_load 1
 # Add a vizualisation for the tip of the arm.
 tipID = "world/blue"
 viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
@@ -45,7 +46,6 @@ viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
 #
 
 
-# %do_load 1
 def cost(q):
     '''Compute score from a configuration'''
     M = robot.placement(q, 6)
@@ -56,7 +56,7 @@ def callback(q):
     viz.applyConfiguration(boxID, Mtarget)
     viz.applyConfiguration(tipID, robot.placement(q, 6))
     viz.display(q)
-    time.sleep(1e-1)
+    time.sleep(1e-2)
 
 
 Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([-0.5, 0.1, 0.2]))  # x,y,z

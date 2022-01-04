@@ -73,7 +73,7 @@ for i in range(50):
     # Display new configuration for robot and ball
     viz.applyConfiguration(ballID, o_ball.tolist() + [1, 0, 0, 0])
     viz.display(q)
-    time.sleep(0.1)
+    time.sleep(1e-2)
 # %end_load
 
 #
@@ -129,11 +129,11 @@ for i in range(100):
     # Display new configuration for robot and box
     viz.applyConfiguration(boxID, oMbox)
     viz.display(q)
-    time.sleep(0.1)
+    time.sleep(1e-2)
 # %end_load
 
 ##########################################################################
 ### This last part is to automatically validate the versions of this example.
 class SimplePickAndPlaceTest(unittest.TestCase):
     def test_oMbox_translation(self):
-        self.assertTrue((np.abs(oMbox.translation - np.array([0.58907366, -0.09457755, 0.2335223])) < 1e-5).all())
+        self.assertTrue((np.abs(oMbox.translation - np.array([ 0.22085156, -0.6436716 ,  0.5632217 ])) < 1e-5).all())
