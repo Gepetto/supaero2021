@@ -1,0 +1,11 @@
+qinit = np.array([-1.1, -3. ])
+for i in range(100):
+     traj = randomDescent(qinit)
+     if dist(traj[-1])<5e-2:
+          print('We found a good traj!')
+          break
+traj = np.array(traj)
+### Chose trajectory end to be in [-pi,pi]
+qend = (traj[-1]+np.pi) % (2*np.pi) - np.pi
+### Take the entire trajectory it modulo 2 pi
+traj += (qend-traj[-1])
