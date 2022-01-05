@@ -46,5 +46,5 @@ def generate(tp_number: int):
 
 
 if __name__ == '__main__':
-    for tp_number in [2]:
+    for tp_number in [0,2]:
         generate(tp_number)

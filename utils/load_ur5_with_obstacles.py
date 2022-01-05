@@ -16,7 +16,7 @@ def XYZRPYtoSE3(xyzrpy):
     p = np.array(xyzrpy[:3])
     return pin.SE3(R,p)
 
-def createRobotWithObstacles(robotname='ur5'):
+def load_ur5_with_obstacles(robotname='ur5'):
 
     ### Robot
     # Load the robot
