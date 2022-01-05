@@ -9,9 +9,9 @@ def sampleSpace(nbSamples=500):
      for i in range(nbSamples):
           q = qrand(False)
           if not coll(q):
-               hfree.append( list(q6_to_q2(q).flat) + [ dist(q), collisionDistance(q) ])
+               hfree.append( list(q.flat) + [ dist(q), collisionDistance(q) ])
           else:
-               hcol.append(  list(q6_to_q2(q).flat) + [ dist(q), 1e-2 ])
+               hcol.append(  list(q.flat) + [ dist(q), 1e-2 ])
      return hcol,hfree
 
 def plotConfigurationSpace(hcol,hfree):

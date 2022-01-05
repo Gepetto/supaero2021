@@ -1,5 +1,6 @@
 # %do_load import
 import pinocchio as pin
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 import time
 import numpy as np
 from numpy.linalg import inv,norm,pinv,svd,eig
@@ -10,44 +11,27 @@ import matplotlib.pylab as plt
 plt.ion()  # matplotlib with interactive setting
 
 # %do_load robot
-robot = load_ur5_with_obstacles()
+robot = load_ur5_with_obstacles(reduced=True)
 # %end_load
 
 # %do_load viewer
-#robot.initViewer(loadModel=True)
-#viz = robot.viz
-Viewer = pin.visualize.MeshcatVisualizer
-viz = Viewer(robot.model, robot.collision_model, robot.visual_model)
-viz.initViewer(loadModel=True)
+viz = MeshcatVisualizer(robot)
 viz.display(robot.q0)
 # %end_load
 
 # %do_load target
-target = Target(robot.viz,position = np.array([.5,.5]))
+target = Target(viz,position = np.array([.5,.5]))
 # %end_load
 
 ################################################################################
 ################################################################################
 ################################################################################
-
-# %do_load q2_to_q6
-def q2_to_q6(q2):
-     '''
-     Transform a vector 2 into a vector 6, corresponding to locking 4 joints of the 6-dof arm. 
-     '''
-     q6 = np.zeros(6)
-     q6.flat[[1,2]] = q2
-     return q6
-
-def q6_to_q2(q6):
-     return q6[1:3]
-# %end_load
 
 # %do_load endef
 def endef(q):
      '''Return the 2d position of the end effector.'''
-     pin.forwardKinematics(robot.model,robot.data,q)
-     return robot.data.oMi[-1].translation[[0,2]]
+     pin.framesForwardKinematics(robot.model,robot.data,q)
+     return robot.data.oMf[-1].translation[[0,2]]
 # %end_load
 
 # %do_load  dist
@@ -70,7 +54,7 @@ def qrand(check=False):
     configuration is not is collision
     '''
     while True:
-        q = q2_to_q6(np.random.rand(2)*6-3)  # sample between -3 and +3.
+        q = np.random.rand(2)*6-3  # sample between -3 and +3.
         if not check or not coll(q): return q
 # %end_load
 
@@ -87,7 +71,7 @@ def collisionDistance(q):
 ################################################################################
 ################################################################################
 
-# %do_load qrand_target
+# %do_not_load qrand_target
 # Sample a random free configuration where dist is small enough.
 def qrandTarget(threshold=5e-2, display=False):
      while True:
@@ -104,7 +88,7 @@ viz.display(qrandTarget())
 ################################################################################
 ################################################################################
 
-# %do_load random_descent
+# %do_not_load random_descent
 # Random descent: crawling from one free configuration to the target with random
 # steps.
 def randomDescent():
@@ -116,8 +100,8 @@ def randomDescent():
                q = q+dq                             # ... keep the step
                viz.display(q)                       # ... display it
                time.sleep(5e-3)                     # ... and sleep for a short while
+randomDescent()
 # %end_load
-# randomDescent()
 
 ################################################################################
 ################################################################################
@@ -135,9 +119,9 @@ def sampleSpace(nbSamples=500):
      for i in range(nbSamples):
           q = qrand(False)
           if not coll(q):
-               hfree.append( list(q6_to_q2(q).flat) + [ dist(q), collisionDistance(q) ])
+               hfree.append( list(q.flat) + [ dist(q), collisionDistance(q) ])
           else:
-               hcol.append(  list(q6_to_q2(q).flat) + [ dist(q), 1e-2 ])
+               hcol.append(  list(q.flat) + [ dist(q), 1e-2 ])
      return hcol,hfree
 
 def plotConfigurationSpace(hcol,hfree):
@@ -165,24 +149,24 @@ plotConfigurationSpace(hcol,hfree)
 ################################################################################
 ################################################################################
 
-# %do_load optim
+# %do_not_load optim
 def cost(q):
      '''
      Cost function: distance to the target
      '''
-     return dist(q2_to_q6(q))
+     return dist(q)**2
      
 def constraint(q):
      '''
      Constraint function: distance to the obstacle should be positive.
      '''
-     return collisionDistance(q2_to_q6(q))
+     return collisionDistance(q)
      
 def callback(q):
      '''
      At each optimization step, display the robot configuration in gepetto-viewer.
      '''
-     viz.display(q2_to_q6(q))
+     viz.display(q)
      time.sleep(.01)
 
 def optimize():
@@ -190,17 +174,17 @@ def optimize():
      Optimize from an initial random configuration to discover a collision-free
      configuration as close as possible to the target. 
      '''
-     return fmin_slsqp(x0=q6_to_q2(qrand(check=True)),
+     return fmin_slsqp(x0=qrand(check=True),
                        func=cost,
                        f_ieqcons=constraint,callback=callback,
                        full_output=1)
 optimize()
 # %end_load
 
-# %do_load useit
+# %do_not_load useit
 while True:
     res=optimize()
-    q=q2_to_q6(res[0])
+    q=res[0]
     viz.display(q)
     if res[4]=='Optimization terminated successfully' and res[1]<1e-6:
         print('Finally successful!')

@@ -9,3 +9,4 @@ def randomDescent():
                q = q+dq                             # ... keep the step
                viz.display(q)                       # ... display it
                time.sleep(5e-3)                     # ... and sleep for a short while
+randomDescent()

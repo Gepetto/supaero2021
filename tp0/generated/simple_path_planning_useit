@@ -1,6 +1,6 @@
 while True:
     res=optimize()
-    q=q2_to_q6(res[0])
+    q=res[0]
     viz.display(q)
     if res[4]=='Optimization terminated successfully' and res[1]<1e-6:
         print('Finally successful!')

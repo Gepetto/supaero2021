@@ -16,11 +16,22 @@ def XYZRPYtoSE3(xyzrpy):
     p = np.array(xyzrpy[:3])
     return pin.SE3(R,p)
 
-def load_ur5_with_obstacles(robotname='ur5'):
+def load_ur5_with_obstacles(robotname='ur5',reduced=False):
 
     ### Robot
     # Load the robot
     robot = robex.load(robotname)
+
+    ### If reduced, then only keep should-tilt and elbow joint, hence creating a simple R2 robot.
+    if reduced:
+        unlocks = [1,2]
+        robot.model,[robot.visual_model,robot.collision_model]\
+            = pin.buildReducedModel(robot.model,[robot.visual_model,robot.collision_model],
+                                    [ i+1 for i in range(robot.nq) if i not in unlocks ],robot.q0)
+        robot.data = robot.model.createData()
+        robot.collision_data = robot.collision_model.createData()
+        robot.visual_data = robot.visual_model.createData()
+        robot.q0 = robot.q0[unlocks].copy()
 
     ### Obstacle map
     # Capsule obstacles will be placed at these XYZ-RPY parameters

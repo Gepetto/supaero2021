@@ -1,4 +1,5 @@
 import pinocchio as pin
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 import time
 import numpy as np
 from numpy.linalg import inv,norm,pinv,svd,eig
