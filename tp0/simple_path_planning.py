@@ -1,4 +1,4 @@
-# %do_load import
+# %jupyter_snippet import
 import pinocchio as pin
 from utils.meshcat_viewer_wrapper import MeshcatVisualizer
 import time
@@ -7,47 +7,47 @@ from numpy.linalg import inv,norm,pinv,svd,eig
 from scipy.optimize import fmin_bfgs,fmin_slsqp
 from utils.load_ur5_with_obstacles import load_ur5_with_obstacles,Target
 import matplotlib.pylab as plt
-# %end_load
+# %end_jupyter_snippet
 plt.ion()  # matplotlib with interactive setting
 
-# %do_load robot
+# %jupyter_snippet robot
 robot = load_ur5_with_obstacles(reduced=True)
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load viewer
+# %jupyter_snippet viewer
 viz = MeshcatVisualizer(robot)
 viz.display(robot.q0)
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load target
+# %jupyter_snippet target
 target = Target(viz,position = np.array([.5,.5]))
-# %end_load
+# %end_jupyter_snippet
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-# %do_load endef
+# %jupyter_snippet endef
 def endef(q):
      '''Return the 2d position of the end effector.'''
      pin.framesForwardKinematics(robot.model,robot.data,q)
      return robot.data.oMf[-1].translation[[0,2]]
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load  dist
+# %jupyter_snippet  dist
 def dist(q):
      '''Return the distance between the end effector end the target (2d).'''
      return norm(endef(q)-target.position)
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load coll
+# %jupyter_snippet coll
 def coll(q):
      '''Return true if in collision, false otherwise.'''
      pin.updateGeometryPlacements(robot.model,robot.data,robot.collision_model,robot.collision_data,q)
      return pin.computeCollisions(robot.collision_model,robot.collision_data,False)
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load qrand
+# %jupyter_snippet qrand
 def qrand(check=False):
     '''
     Return a random configuration. If check is True, this
@@ -56,21 +56,21 @@ def qrand(check=False):
     while True:
         q = np.random.rand(2)*6.4-3.2  # sample between -3.2 and +3.2.
         if not check or not coll(q): return q
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load colldist
+# %jupyter_snippet colldist
 def collisionDistance(q):
      '''Return the minimal distance between robot and environment. '''
      pin.updateGeometryPlacements(robot.model,robot.data,robot.collision_model,robot.collision_data,q)
      if pin.computeCollisions(robot.collision_model,robot.collision_data,False): 0
      idx = pin.computeDistances(robot.collision_model,robot.collision_data)
      return robot.collision_data.distanceResults[idx].min_distance
-# %end_load
+# %end_jupyter_snippet
 ################################################################################
 ################################################################################
 ################################################################################
 
-# %do_not_load qrand_target
+# %jupyter_snippet qrand_target
 # Sample a random free configuration where dist is small enough.
 def qrandTarget(threshold=5e-2, display=False):
      while True:
@@ -81,13 +81,13 @@ def qrandTarget(threshold=5e-2, display=False):
           if not coll(q) and dist(q)<threshold:
                return q
 viz.display(qrandTarget())
-# %end_load
+# %end_jupyter_snippet
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-# %do_not_load random_descent
+# %jupyter_snippet random_descent
 # Random descent: crawling from one free configuration to the target with random
 # steps.
 def randomDescent(q0 = None):
@@ -103,13 +103,13 @@ def randomDescent(q0 = None):
                time.sleep(5e-3)                     # ... and sleep for a short while
      return hist
 randomDescent();
-# %end_load
+# %end_jupyter_snippet
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-# %do_load sample
+# %jupyter_snippet sample
 def sampleSpace(nbSamples=500):
      '''
      Sample nbSamples configurations and store them in two lists depending
@@ -145,14 +145,14 @@ def plotConfigurationSpace(hcol,hfree,markerSize=20):
 
 hcol,hfree = sampleSpace(100)
 plotConfigurationSpace(hcol,hfree)
-# %end_load
+# %end_jupyter_snippet
 
 ################################################################################
 ################################################################################
 ################################################################################
 
 ### Plot random trajectories in the same plot
-# %do_not_load traj
+# %jupyter_snippet traj
 qinit = np.array([-1.1, -3. ])
 for i in range(100):
      traj = randomDescent(qinit)
@@ -164,14 +164,14 @@ traj = np.array(traj)
 qend = (traj[-1]+np.pi) % (2*np.pi) - np.pi
 ### Take the entire trajectory it modulo 2 pi
 traj += (qend-traj[-1])
-# %end_load
+# %end_jupyter_snippet
 plt.plot(traj[:,0],traj[:,1],'r',lw=5)
 
 ################################################################################
 ################################################################################
 ################################################################################
 
-# %do_not_load optim
+# %jupyter_snippet optim
 def cost(q):
      '''
      Cost function: distance to the target
@@ -201,9 +201,9 @@ def optimize():
                        f_ieqcons=constraint,callback=callback,
                        full_output=1)
 optimize()
-# %end_load
+# %end_jupyter_snippet
 
-# %do_not_load useit
+# %jupyter_snippet useit
 while True:
     res=optimize()
     q=res[0]
@@ -212,4 +212,4 @@ while True:
         print('Finally successful!')
         break
     print("Failed ... let's try again! ")
-# %end_load
+# %end_jupyter_snippet

@@ -36,7 +36,7 @@ print("Let's go to pdes.")
 # Add a vizualization for the target
 boxID = "world/box"
 viz.addBox(boxID, [.05, .1, .2], [1., .2, .2, .5])
-# %do_load 1
+# %jupyter_snippet 1
 # Add a vizualisation for the tip of the arm.
 tipID = "world/blue"
 viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
@@ -63,7 +63,7 @@ Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([-0.5, 0.1, 0.2]))  
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
 
 print('The robot finally reached effector placement at\n', robot.placement(qopt, 6))
-# %end_load
+# %end_jupyter_snippet
 
 
 class InvGeom6DTest(unittest.TestCase):

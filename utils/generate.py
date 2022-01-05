@@ -4,6 +4,8 @@
 from pathlib import Path
 import json
 
+hashtags = ['jupyter_snippet']
+#hashtags = [ 'do_load', 'do_not_load', 'load' ]
 
 def generate(tp_number: int):
     tp = Path() / f'tp{tp_number}'
@@ -21,21 +23,21 @@ def generate(tp_number: int):
         dest = None
         with filename.open() as f_in:
             for line_number, line in enumerate(f_in):
-                if line.startswith('# %do_load ') or line.startswith('# %do_not_load'):
+                if any([ line.startswith(f'# %{hashtag}') for hashtag in hashtags ]):
                     if dest is not None:
-                        raise SyntaxError(f'do_load / do_not_load block open twice at line {line_number + 1}')
+                        raise SyntaxError(f'%{hashtags[0]} block open twice at line {line_number + 1}')
                     dest = generated / f'{filename.stem}_{line.split()[2]}'
-                    hidden = '%do_not_load' in line
-                elif line.strip() == '# %end_load':
+                    hidden = False
+                elif any([ line.strip() == f'# %end_{hashtag}' for hashtag in hashtags ]):
                     if dest is None:
-                        raise SyntaxError(f'%end_load block before open at line {line_number + 1}')
+                        raise SyntaxError(f'%{hashtags[0]} block before open at line {line_number + 1}')
                     with dest.open('w') as f_out:
                         f_out.write(''.join(content))
-                    content = [f'%do_not_load {dest}\n'] if hidden else [f'# %load {dest}\n', '\n'] + content
-                    #content[-1] = content[-1].strip() # TODO
                     for cell_number, cell in enumerate(cells_copy):
-                        if any(cell_line.endswith(f'load {dest}') for cell_line in cell['source']):
-                            data['cells'][cell_number]['source'] = content
+                        if cell['source'][0].endswith(f'%load {dest}'):
+                            data['cells'][cell_number]['source'] = [f'# %load {dest}\n'] + content
+                        #if f'%do_not_load {dest}' in cell['source'][0]:
+                        #    data['cells'][cell_number]['source'] = [f'%do_not_load {dest}\n']
                     content = []
                     hidden = False
                     dest = None

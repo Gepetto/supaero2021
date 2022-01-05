@@ -27,7 +27,7 @@ NV = robot.model.nv
 viz = MeshcatVisualizer(robot)
 viz.display(robot.q0)
 
-# %do_load 1
+# %jupyter_snippet 1
 robot.feetIndexes = [robot.model.getFrameId(frameName) for frameName in ['HR_FOOT', 'HL_FOOT', 'FR_FOOT', 'FL_FOOT']]
 
 # --- Add box to represent target
@@ -73,7 +73,7 @@ def callback(q):
 
 Mtarget = pin.SE3(pin.utils.rotate('x', 3.14 / 4), np.array([0.5, 0.1, 0.2]))  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
-# %end_load
+# %end_jupyter_snippet
 
 
 class FloatingTest(unittest.TestCase):

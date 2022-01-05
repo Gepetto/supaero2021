@@ -8,16 +8,16 @@ import example_robot_data as robex
 
 from utils.meshcat_viewer_wrapper import MeshcatVisualizer, colors
 
-# %do_load 1
+# %jupyter_snippet 1
 robot = robex.load('ur5')
-# %end_load
+# %end_jupyter_snippet
 NQ = robot.model.nq
 NV = robot.model.nv
 
 # Open the viewer
 viz = MeshcatVisualizer(robot)
 
-# %do_load 2
+# %jupyter_snippet 2
 # Add a red box in the viewer
 ballID = "world/ball"
 viz.addSphere(ballID, 0.1, colors.red)
@@ -26,14 +26,14 @@ viz.addSphere(ballID, 0.1, colors.red)
 # The viewer expect position and rotation, apppend the identity quaternion
 q_ball = [0.5, 0.1, 0.2, 1, 0, 0, 0]
 viz.applyConfiguration(ballID, q_ball)
-# %end_load
+# %end_jupyter_snippet
 
 #
 # PICK #############################################################
 #
 
 # Configuration for picking the box
-# %do_load 3
+# %jupyter_snippet 3
 q0 = np.zeros(NQ)  # set the correct values here
 q0[0] = -0.375
 q0[1] = -1.2
@@ -44,7 +44,7 @@ q0[5] = 0.
 
 viz.display(q0)
 q = q0.copy()
-# %end_load
+# %end_jupyter_snippet
 print("The robot is display with end effector on the red ball.")
 
 #
@@ -53,7 +53,7 @@ print("The robot is display with end effector on the red ball.")
 
 print("Let's start the movement ...")
 
-# %do_not_load 4
+# %jupyter_snippet 4
 # Random velocity of the robot driving the movement
 vq = np.array([2., 0, 0, 4., 0, 0])
 
@@ -74,7 +74,7 @@ for i in range(50):
     viz.applyConfiguration(ballID, o_ball.tolist() + [1, 0, 0, 0])
     viz.display(q)
     time.sleep(1e-2)
-# %end_load
+# %end_jupyter_snippet
 
 #
 # MOVE 6D #############################################################
@@ -83,7 +83,7 @@ for i in range(50):
 q = q0.copy()
 viz.display(q0)
 
-# %do_load 5
+# %jupyter_snippet 5
 # Add a red box in the viewer
 boxID = "world/box"
 #viz.delete(ballID)
@@ -93,9 +93,9 @@ viz.addBox(boxID, [0.1, 0.2, 0.1], colors.magenta)
 q_box = [0.5, 0.1, 0.2, 1, 0, 0, 0]
 viz.applyConfiguration(boxID, q_box)
 viz.applyConfiguration(ballID, [2,2,2,1,0,0,0])
-# %end_load
+# %end_jupyter_snippet
 
-# %do_load 6
+# %jupyter_snippet 6
 q0 = np.zeros(NQ)
 q0[0] = -0.375
 q0[1] = -1.2
@@ -105,11 +105,11 @@ q0[4] = q0[0]
 
 viz.display(q0)
 q = q0.copy()
-# %end_load
+# %end_jupyter_snippet
 
 print("Now moving with a 6D object ... ")
 
-# %do_not_load 7
+# %jupyter_snippet 7
 # Random velocity of the robot driving the movement
 vq = np.array([2., 0, 0, 4., 0, 0])
 
@@ -130,7 +130,7 @@ for i in range(100):
     viz.applyConfiguration(boxID, oMbox)
     viz.display(q)
     time.sleep(1e-2)
-# %end_load
+# %end_jupyter_snippet
 
 ##########################################################################
 ### This last part is to automatically validate the versions of this example.

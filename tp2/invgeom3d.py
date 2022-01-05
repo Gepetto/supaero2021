@@ -35,7 +35,7 @@ print("Let's go to pdes.")
 # Add a vizualization for the target
 ballID = "world/ball"
 viz.addSphere(ballID, .05, 'green')
-# %do_not_load 1
+# %jupyter_snippet 1
 # Add a vizualisation for the tip of the arm.
 tipID = "world/blue"
 viz.addBox(tipID, [.08] * 3, [.2, .2, 1., .5])
@@ -58,7 +58,7 @@ def callback(q):
 
 target = np.array([0.5, 0.1, 0.2])  # x,y,z
 qopt = fmin_bfgs(cost, robot.q0, callback=callback)
-# %end_load
+# %end_jupyter_snippet
 
 ##########################################################################
 ### This last part is to automatically validate the versions of this example.
