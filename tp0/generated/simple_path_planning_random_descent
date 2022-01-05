@@ -1,12 +1,15 @@
 # Random descent: crawling from one free configuration to the target with random
 # steps.
-def randomDescent():
-     q = qrand(check=True)
+def randomDescent(q0 = None):
+     q = qrand(check=True) if q0 is None else q0
+     hist = [ q.copy() ]
      for i in range(100):
           dq = qrand()*.1                           # Choose a random step ...
           qtry = q+dq                               # ... apply
           if dist(q)>dist(q+dq) and not coll(q+dq): # If distance decrease without collision ...
                q = q+dq                             # ... keep the step
+               hist.append(q.copy())                # ... keep a trace of it
                viz.display(q)                       # ... display it
                time.sleep(5e-3)                     # ... and sleep for a short while
-randomDescent()
+     return hist
+randomDescent();

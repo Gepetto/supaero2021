@@ -14,7 +14,7 @@ def sampleSpace(nbSamples=500):
                hcol.append(  list(q.flat) + [ dist(q), 1e-2 ])
      return hcol,hfree
 
-def plotConfigurationSpace(hcol,hfree):
+def plotConfigurationSpace(hcol,hfree,markerSize=20):
      '''
      Plot 2 "scatter" plots: the first one plot the distance to the target for 
      each configuration, the second plots the distance to the obstacles (axis q1,q2, 
@@ -23,11 +23,11 @@ def plotConfigurationSpace(hcol,hfree):
      htotal = hcol + hfree
      h=np.array(htotal)
      plt.subplot(2,1,1)
-     plt.scatter(h[:,0],h[:,1],c=h[:,2],s=20,lw=0)
+     plt.scatter(h[:,0],h[:,1],c=h[:,2],s=markerSize,lw=0)
      plt.title("Distance to the target")
      plt.colorbar()
      plt.subplot(2,1,2)
-     plt.scatter(h[:,0],h[:,1],c=h[:,3],s=20,lw=0)
+     plt.scatter(h[:,0],h[:,1],c=h[:,3],s=markerSize,lw=0)
      plt.title("Distance to the obstacles")
      plt.colorbar()
 

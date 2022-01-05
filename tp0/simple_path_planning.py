@@ -54,18 +54,17 @@ def qrand(check=False):
     configuration is not is collision
     '''
     while True:
-        q = np.random.rand(2)*6-3  # sample between -3 and +3.
+        q = np.random.rand(2)*6.4-3.2  # sample between -3.2 and +3.2.
         if not check or not coll(q): return q
 # %end_load
 
 # %do_load colldist
 def collisionDistance(q):
      '''Return the minimal distance between robot and environment. '''
-     threshold = 1e-2
      pin.updateGeometryPlacements(robot.model,robot.data,robot.collision_model,robot.collision_data,q)
-     if pin.computeCollisions(robot.collision_model,robot.collision_data,False): return -threshold
+     if pin.computeCollisions(robot.collision_model,robot.collision_data,False): 0
      idx = pin.computeDistances(robot.collision_model,robot.collision_data)
-     return pin.computeDistance(robot.collision_model,robot.collision_data,idx).min_distance - threshold
+     return robot.collision_data.distanceResults[idx].min_distance
 # %end_load
 ################################################################################
 ################################################################################
@@ -91,16 +90,19 @@ viz.display(qrandTarget())
 # %do_not_load random_descent
 # Random descent: crawling from one free configuration to the target with random
 # steps.
-def randomDescent():
-     q = qrand(check=True)
+def randomDescent(q0 = None):
+     q = qrand(check=True) if q0 is None else q0
+     hist = [ q.copy() ]
      for i in range(100):
           dq = qrand()*.1                           # Choose a random step ...
           qtry = q+dq                               # ... apply
           if dist(q)>dist(q+dq) and not coll(q+dq): # If distance decrease without collision ...
                q = q+dq                             # ... keep the step
+               hist.append(q.copy())                # ... keep a trace of it
                viz.display(q)                       # ... display it
                time.sleep(5e-3)                     # ... and sleep for a short while
-randomDescent()
+     return hist
+randomDescent();
 # %end_load
 
 ################################################################################
@@ -124,7 +126,7 @@ def sampleSpace(nbSamples=500):
                hcol.append(  list(q.flat) + [ dist(q), 1e-2 ])
      return hcol,hfree
 
-def plotConfigurationSpace(hcol,hfree):
+def plotConfigurationSpace(hcol,hfree,markerSize=20):
      '''
      Plot 2 "scatter" plots: the first one plot the distance to the target for 
      each configuration, the second plots the distance to the obstacles (axis q1,q2, 
@@ -133,17 +135,37 @@ def plotConfigurationSpace(hcol,hfree):
      htotal = hcol + hfree
      h=np.array(htotal)
      plt.subplot(2,1,1)
-     plt.scatter(h[:,0],h[:,1],c=h[:,2],s=20,lw=0)
+     plt.scatter(h[:,0],h[:,1],c=h[:,2],s=markerSize,lw=0)
      plt.title("Distance to the target")
      plt.colorbar()
      plt.subplot(2,1,2)
-     plt.scatter(h[:,0],h[:,1],c=h[:,3],s=20,lw=0)
+     plt.scatter(h[:,0],h[:,1],c=h[:,3],s=markerSize,lw=0)
      plt.title("Distance to the obstacles")
      plt.colorbar()
 
 hcol,hfree = sampleSpace(100)
 plotConfigurationSpace(hcol,hfree)
 # %end_load
+
+################################################################################
+################################################################################
+################################################################################
+
+### Plot random trajectories in the same plot
+# %do_not_load traj
+qinit = np.array([-1.1, -3. ])
+for i in range(100):
+     traj = randomDescent(qinit)
+     if dist(traj[-1])<5e-2:
+          print('We found a good traj!')
+          break
+traj = np.array(traj)
+### Chose trajectory end to be in [-pi,pi]
+qend = (traj[-1]+np.pi) % (2*np.pi) - np.pi
+### Take the entire trajectory it modulo 2 pi
+traj += (qend-traj[-1])
+# %end_load
+plt.plot(traj[:,0],traj[:,1],'r',lw=5)
 
 ################################################################################
 ################################################################################
