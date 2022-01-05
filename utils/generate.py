@@ -32,7 +32,7 @@ def generate(tp_number: int):
                     with dest.open('w') as f_out:
                         f_out.write(''.join(content))
                     content = [f'%do_not_load {dest}\n'] if hidden else [f'# %load {dest}\n', '\n'] + content
-                    content[-1] = content[-1].strip()
+                    #content[-1] = content[-1].strip() # TODO
                     for cell_number, cell in enumerate(cells_copy):
                         if any(f'load {dest}' in cell_line for cell_line in cell['source']):
                             data['cells'][cell_number]['source'] = content
