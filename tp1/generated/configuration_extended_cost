@@ -1,0 +1,3 @@
+def cost_9(ps):
+    eff = endeffector_9(ps)
+    return norm(eff - target)**2

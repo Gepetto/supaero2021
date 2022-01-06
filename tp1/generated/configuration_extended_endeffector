@@ -1,0 +1,4 @@
+def endeffector_9(ps):
+    assert (ps.shape == (9, ))
+    x1, y1, t1, x2, y2, t2, x3, y3, t3 = ps
+    return np.array([x3, y3])

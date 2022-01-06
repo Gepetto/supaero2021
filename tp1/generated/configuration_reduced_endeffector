@@ -1,0 +1,8 @@
+def endeffector(q):
+    '''Return the 2D position of the end effector of the robot at configuration q. '''
+    assert (q.shape == (2,))
+    c0 = np.cos(q[0])
+    s0 = np.sin(q[0])
+    c1 = np.cos(q[0] + q[1])
+    s1 = np.sin(q[0] + q[1])
+    return np.array([c0 + c1, s0 + s1])

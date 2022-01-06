@@ -1,0 +1,2 @@
+def penalty(ps):
+    return cost_9(ps) + 10 * sum(np.square(constraint_9(ps)))

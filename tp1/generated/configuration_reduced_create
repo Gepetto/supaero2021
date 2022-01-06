@@ -1,0 +1,6 @@
+viz.addSphere('joint1',.1,[1,0,0,1])
+viz.addSphere('joint2',.1,[1,0,0,1])
+viz.addSphere('joint3',.1,[1,0,0,1])
+viz.addCylinder('arm1',.75,.05,[.65,.65,.65,1])
+viz.addCylinder('arm2',.75,.05,[.65,.65,.65,1])
+viz.addSphere('target',.1001,[0,.8,.1,1])
