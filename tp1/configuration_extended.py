@@ -6,42 +6,47 @@ are the placement of the 3 bodies of the robot. BFGS and SLSQP solvers are used.
 import time
 import numpy as np
 from scipy.optimize import fmin_bfgs,fmin_slsqp
-import meshcat
+from utils.meshcat_viewer_wrapper import MeshcatVisualizer,translation2d,planar
 from numpy.linalg import norm,inv,pinv,svd,eig
-from meshcat.geometry import Cylinder,Box,Sphere
-from transfo import t2d,translation
-import colors
 
-viz = meshcat.Visualizer()
-viz['joint1'].set_object(Sphere(.1),colors.red)
-viz['joint2'].set_object(Sphere(.1),colors.red)
-viz['joint3'].set_object(Sphere(.1),colors.red)
-viz['arm1'].set_object(Cylinder(.75,.05),colors.grey)
-viz['arm2'].set_object(Cylinder(.75,.05),colors.grey)
-viz['target'].set_object(Sphere(.1001),colors.green)
+viz = MeshcatVisualizer(url='classical')
 
+viz.addSphere('joint1',.1,[1,0,0,1])
+viz.addSphere('joint2',.1,[1,0,0,1])
+viz.addSphere('joint3',.1,[1,0,0,1])
+viz.addCylinder('arm1',.75,.05,[.65,.65,.65,1])
+viz.addCylinder('arm2',.75,.05,[.65,.65,.65,1])
+viz.addSphere('target',.1001,[0,.8,.1,1])
+
+# %jupyter_snippet display
 def display_9(ps):
-    '''Display the robot in Gepetto Viewer. '''
+    '''Display the robot in the Viewer. '''
     assert (ps.shape == (9, ))
     x1, y1, t1, x2, y2, t2, x3, y3, t3 = ps
-    viz['joint1'].set_transform(t2d(x1,                  y1,                  t1))
-    viz['arm1'  ].set_transform(t2d(x1 + np.cos(t1) / 2, x1 + np.sin(t1) / 2, t1))
-    viz['joint2'].set_transform(t2d(x2,                  y2,                  t2))
-    viz['arm2'  ].set_transform(t2d(x2 + np.cos(t2) / 2, y2 + np.sin(t2) / 2, t2))
-    viz['joint3'].set_transform(t2d(x3,                  y3,                  t3))
+    viz.applyConfiguration('joint1',planar(x1,                  y1,                  t1))
+    viz.applyConfiguration('arm1'  ,planar(x1 + np.cos(t1) / 2, x1 + np.sin(t1) / 2, t1))
+    viz.applyConfiguration('joint2',planar(x2,                  y2,                  t2))
+    viz.applyConfiguration('arm2'  ,planar(x2 + np.cos(t2) / 2, y2 + np.sin(t2) / 2, t2))
+    viz.applyConfiguration('joint3',planar(x3,                  y3,                  t3))
+# %end_jupyter_snippet
 
+# %jupyter_snippet endeffector
 def endeffector_9(ps):
     assert (ps.shape == (9, ))
     x1, y1, t1, x2, y2, t2, x3, y3, t3 = ps
     return np.array([x3, y3])
+# %end_jupyter_snippet
 
 target = np.array([.5, .5])
-viz['target'].set_transform(translation(0,target[0],target[1]))
+viz.applyConfiguration('target',translation2d(target[0],target[1]))
 
+# %jupyter_snippet cost
 def cost_9(ps):
     eff = endeffector_9(ps)
     return norm(eff - target)**2
+# %end_jupyter_snippet
 
+# %jupyter_snippet constraint
 def constraint_9(ps):
     assert (ps.shape == (9, ))
     x1, y1, t1, x2, y2, t2, x3, y3, t3 = ps
@@ -53,13 +58,18 @@ def constraint_9(ps):
     res[4] = x2 + np.cos(t2) - x3
     res[5] = y2 + np.sin(t2) - y3
     return res
+# %end_jupyter_snippet
 
+# %jupyter_snippet penalty
 def penalty(ps):
     return cost_9(ps) + 10 * sum(np.square(constraint_9(ps)))
+# %end_jupyter_snippet
 
+# %jupyter_snippet callback
 def callback_9(ps):
     display_9(ps)
     time.sleep(.5)
+# %end_jupyter_snippet
 
 x0 = np.array([ 0.0,] * 9)
 
