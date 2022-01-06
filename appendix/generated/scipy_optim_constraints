@@ -1,0 +1,7 @@
+def constraint_eq(x):
+    ''' Constraint x^3 = y '''
+    return np.array([x[0]**3 - x[1]])
+
+def constraint_ineq(x):
+    '''Constraint x>=2, y>=2'''
+    return np.array([x[0] - 2, x[1] - 2])

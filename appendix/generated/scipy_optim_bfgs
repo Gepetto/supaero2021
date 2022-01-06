@@ -1,0 +1,4 @@
+x0 = np.array([0.0, 0.0])
+# Optimize cost without any constraints in BFGS, with traces.
+xopt_bfgs = fmin_bfgs(cost, x0, callback=CallbackLogger())
+print('\n *** Xopt in BFGS = %s \n\n\n\n' % str(xopt_bfgs))

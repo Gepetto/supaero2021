@@ -1,0 +1,3 @@
+# Optimize cost without any constraints in CLSQ
+xopt_lsq = fmin_slsqp(cost, [-1.0, 1.0], iprint=2, full_output=1)
+print('\n *** Xopt in LSQ = %s \n\n\n\n' % str(xopt_lsq))

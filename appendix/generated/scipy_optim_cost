@@ -1,0 +1,5 @@
+def cost(x):
+    '''Cost f(x,y) = x^2 + 2y^2 - 2xy - 2x '''
+    x0 = x[0]
+    x1 = x[1]
+    return -1 * (2 * x0 * x1 + 2 * x0 - x0**2 - 2 * x1**2)

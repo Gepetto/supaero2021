@@ -1,0 +1,7 @@
+class CallbackLogger:
+    def __init__(self):
+        self.nfeval = 1
+
+    def __call__(self, x):
+        print('===CBK=== {0:4d}   {1: 3.6f}   {2: 3.6f}'.format(self.nfeval, x[0], x[1], cost(x)))
+        self.nfeval += 1
