@@ -5,18 +5,20 @@ from pathlib import Path
 import json
 
 hashtags = ['jupyter_snippet']
-#hashtags = [ 'do_load', 'do_not_load', 'load' ]
 
-def generate(tp_number: int):
-    tp = Path() / f'tp{tp_number}'
-    ipynb = next(Path().glob(f'{tp_number}_*.ipynb'))
-    print(f'processing {ipynb} & {tp}')
+def generate_from_id(tp_id : int):
+    folder = Path() / f'tp{tp_id}'
+    ipynb = next(Path().glob(f'{tp_id}_*.ipynb'))
+    generate(ipynb,folder)
+    
+def generate(ipynb, folder):
+    print(f'processing {ipynb} with scripts in {folder}')
     with ipynb.open() as f:
         data = json.load(f)
     cells_copy = data['cells'].copy()
-    generated = tp / 'generated'
+    generated = folder / 'generated'
     generated.mkdir(exist_ok=True)
-    for filename in tp.glob('*.py'):
+    for filename in folder.glob('*.py'):
         print(f' processing {filename}')
         content = []
         hidden = False
@@ -34,6 +36,7 @@ def generate(tp_number: int):
                     with dest.open('w') as f_out:
                         f_out.write(''.join(content))
                     for cell_number, cell in enumerate(cells_copy):
+                        if len(cell['source'])==0: continue
                         if cell['source'][0].endswith(f'%load {dest}'):
                             data['cells'][cell_number]['source'] = [f'# %load {dest}\n'] + content
                         #if f'%do_not_load {dest}' in cell['source'][0]:
@@ -48,5 +51,8 @@ def generate(tp_number: int):
 
 
 if __name__ == '__main__':
-    for tp_number in [0,2]:
-        generate(tp_number)
+    for tp_number in [0,1,2]:
+        generate_from_id(tp_number)
+
+    for app in [ 'appendix_scipy_optimizers']:
+        generate(next(Path().glob(app+'.ipynb')),Path()/'appendix')
