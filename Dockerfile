@@ -2,7 +2,7 @@ FROM python:3.9
 
 RUN useradd -m user
 USER user
-WORKDIR /home/user
+WORKDIR /home/user/tp
 ENV PATH /home/user/.local/bin:$PATH
 CMD jupyter notebook
 
