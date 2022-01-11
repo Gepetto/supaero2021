@@ -1,0 +1,6 @@
+crocoddyl
+example-robot-data
+jupyterlab
+matplotlib
+meshcat
+scipy
