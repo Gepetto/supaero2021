@@ -45,10 +45,14 @@ In general, running +pip is likely to run an alias on +pip in /usr, so either ru
 
 ### Installing docker
 
-On linux, install docker with +apt (or see [https://docs.docker.com/engine/install/ubuntu/]).
+On linux, install docker with +apt (or see https://docs.docker.com/engine/install/ubuntu/).
 
 ```bash
 sudo apt install docker.io
 ```
-On other OS, see [https://docs.docker.com/get-docker/].
+On other OS, see [how to get Docker](https://docs.docker.com/get-docker/).
 
+
+# Join me on \[Matrix\]
+
+[\[Matrix\]](https://matrix.org/) is a distributed chat system that will be used during the class. Consider [creating an account](https://app.element.io/#/register) and join [the classroom channel](https://matrix.to/#/#supaero-robotics-2022:laas.fr).
